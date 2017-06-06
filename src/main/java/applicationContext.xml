@@ -79,7 +79,68 @@
 	</bean>
 	!-->
 	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="contextApplicationContextProvider"
+		class="bd2.Muber.util.Bd2ContextProvider">
+	</bean>
+	
+	<bean id="travelsRepository"
+		class="bd2.Muber.repositories.impl.HibernateTravelsRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
+	</bean>
+
+	<bean id="repositoryLocator" class="bd2.Muber.repositories.RepositoryLocator"
+		factory-method="getInstance">
+		<property name="travelsRepository">
+			<ref bean="travelsRepository" />
+		</property>
+	</bean>
+
+	<bean id="baseService" class="bd2.Muber.services.impl.BaseServiceImpl">
+		<property name="travelsRepository">
+			<ref bean="travelsRepository" />
+		</property>
+		<property name="dtoFactory">
+			<ref bean="dtoFactory" />
+		</property>
+	</bean>
+
+	<bean id="travelsServiceTarget" class="bd2.Muber.services.impl.TravelsServiceImpl"
+		parent="baseService">
+	</bean>
+
+	<bean id="travelsService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="travelsServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="serviceLocator" class="bd2.Muber.services.ServiceLocator"
+		factory-method="getInstance">
+		<property name="travelsService">
+			<ref bean="travelsService" />
+		</property>
+	</bean>
+	
 </beans>
    
-
-	
