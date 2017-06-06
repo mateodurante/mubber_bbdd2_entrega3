@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 14/04/2017 23:51:25 by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-    <class name="bd2.Muber.models.Qualification" table="QUALIFICATION">
+    <class name="bd2.Muber.model.Qualification" table="QUALIFICATION">
         <id name="idQualification" type="java.lang.Long">
             <column name="IDQUALIFICATION" />
             <generator class="native" />
@@ -14,10 +14,10 @@
         <property name="comment" type="java.lang.String">
             <column name="COMMENT" />
         </property>
-        <many-to-one name="passenger" class="bd2.Muber.models.Passenger" unique="true" fetch="join">
+        <many-to-one name="passenger" class="bd2.Muber.model.Passenger" unique="true" fetch="join">
             <column name="IDPASSENGER" />
         </many-to-one>
-        <many-to-one name="travel" class="bd2.Muber.models.Travel" unique="true" fetch="join">
+        <many-to-one name="travel" class="bd2.Muber.model.Travel" unique="true" fetch="join">
             <column name="IDTRAVEL" />
         </many-to-one>
     </class>

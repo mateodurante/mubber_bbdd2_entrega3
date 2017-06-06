@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 14/04/2017 23:51:25 by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-    <class name="bd2.Muber.models.Travel" table="TRAVEL">
+    <class name="bd2.Muber.model.Travel" table="TRAVEL">
         <id name="idTravel" type="java.lang.Long">
             <column name="IDTRAVEL" />
             <generator class="native" />
@@ -30,9 +30,9 @@
             <key column="IDTRAVEL" />
             <list-index></list-index>
             <many-to-many column="IDPASSENGER" 
-            	class="bd2.Muber.models.Passenger" />
+            	class="bd2.Muber.model.Passenger" />
         </list>
-        <many-to-one name="driver" class="bd2.Muber.models.Driver" fetch="join" cascade="all">
+        <many-to-one name="driver" class="bd2.Muber.model.Driver" fetch="join" cascade="all">
             <column name="IDDRIVER" />
         </many-to-one>
     </class>
