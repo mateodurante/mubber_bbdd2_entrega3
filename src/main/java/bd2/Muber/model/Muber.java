@@ -1,4 +1,4 @@
-package bd2.Muber.models;
+package bd2.Muber.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

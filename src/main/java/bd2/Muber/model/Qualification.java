@@ -1,4 +1,4 @@
-package bd2.Muber.models;
+package bd2.Muber.model;
 
 public class Qualification {
 	private Long idQualification;

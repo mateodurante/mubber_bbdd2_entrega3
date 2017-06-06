@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
 
-import bd2.Muber.models.*;
+import bd2.Muber.model.*;
 
 @ControllerAdvice
 @RequestMapping("/services")

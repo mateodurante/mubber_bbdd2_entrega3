@@ -20,6 +20,10 @@ http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
 				Agregar aca los archivos de mapeo, por ejemplo: 			
 				<value>bd2/Muber/model/usuario.hbm.xml</value>
  -->
+ 				<value>bd2/Muber/model/Muber.hbm.xml</value>
+ 				<value>bd2/Muber/model/Qualification.hbm.xml</value>
+ 				<value>bd2/Muber/model/Travel.hbm.xml</value>
+ 				<value>bd2/Muber/model/User.hbm.xml</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
