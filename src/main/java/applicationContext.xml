@@ -14,71 +14,7 @@
 	<import resource="classpath:dataSource.xml" />
     <import resource="classpath:hibernate.cfg.xml" />
     
-<!-- 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-
-	<bean id="contextApplicationContextProvider"
-		class="bd2.Muber.util.Bd2ContextProvider">
-	</bean>
-
-	<bean id="pasajerosRepository"
-		class="bd2.Muber.repositories.impl.HibernatePasajerosRepository">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-
-	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
-	</bean>
-
-	<bean id="repositoryLocator" class="bd2.Muber.repositories.RepositoryLocator"
-		factory-method="getInstance">
-		<property name="pasajerosRepository">
-			<ref bean="pasajerosRepository" />
-		</property>
-	</bean>
-
-	<bean id="baseService" class="bd2.Muber.services.impl.BaseServiceImpl">
-		<property name="pasajerosRepository">
-			<ref bean="pasajerosRepository" />
-		</property>
-		<property name="dtoFactory">
-			<ref bean="dtoFactory" />
-		</property>
-	</bean>
-
-	<bean id="pasajerosServiceTarget" class="bd2.Muber.services.impl.PasajerosServiceImpl"
-		parent="baseService">
-	</bean>
-
-	<bean id="pasajerosService"
-		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager" />
-		</property>
-		<property name="target">
-			<ref bean="pasajerosServiceTarget" />
-		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-			</props>
-		</property>
-	</bean>
-	
-	<bean id="serviceLocator" class="bd2.Muber.services.ServiceLocator"
-		factory-method="getInstance">
-		<property name="pasajerosService">
-			<ref bean="pasajerosService" />
-		</property>
-	</bean>
-	!-->
-	
+    
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<property name="sessionFactory">
@@ -90,43 +26,90 @@
 		class="bd2.Muber.util.Bd2ContextProvider">
 	</bean>
 	
-	<bean id="travelsRepository"
-		class="bd2.Muber.repositories.impl.HibernateTravelsRepository">
+	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
+	</bean>
+
+
+<!-- Start of Repositories -->
+	<bean id="driverRepository"
+		class="bd2.Muber.repositories.impl.HibernateDriverRepository">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-
-	<bean id="dtoFactory" class="bd2.Muber.dto.DTOFactory">
-	</bean>
-
-	<bean id="repositoryLocator" class="bd2.Muber.repositories.RepositoryLocator"
-		factory-method="getInstance">
-		<property name="travelsRepository">
-			<ref bean="travelsRepository" />
+	
+	<bean id="passengerRepository"
+		class="bd2.Muber.repositories.impl.HibernatePassengerRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
 		</property>
 	</bean>
+	
+	<bean id="qualificationRepository"
+		class="bd2.Muber.repositories.impl.HibernateQualificationRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<bean id="travelRepository"
+		class="bd2.Muber.repositories.impl.HibernateTravelRepository">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+<!-- End of Repositories -->
 
+
+<!-- Start of RepositoryLocator -->
+	<bean id="repositoryLocator" class="bd2.Muber.repositories.RepositoryLocator"
+		factory-method="getInstance">
+		<property name="driverRepository">
+			<ref bean="driverRepository" />
+		</property>
+		<property name="passengerRepository">
+			<ref bean="passengerRepository" />
+		</property>
+		<property name="qualificationRepository">
+			<ref bean="qualificationRepository" />
+		</property>
+		<property name="travelRepository">
+			<ref bean="travelRepository" />
+		</property>
+	</bean>
+<!-- End of RepositoryLocator -->
+
+
+<!-- Start Services -->	
 	<bean id="baseService" class="bd2.Muber.services.impl.BaseServiceImpl">
-		<property name="travelsRepository">
-			<ref bean="travelsRepository" />
+		<property name="driverRepository">
+			<ref bean="driverRepository" />
+		</property>
+		<property name="passengerRepository">
+			<ref bean="passengerRepository" />
+		</property>
+		<property name="qualificationRepository">
+			<ref bean="qualificationRepository" />
+		</property>
+		<property name="travelRepository">
+			<ref bean="travelRepository" />
 		</property>
 		<property name="dtoFactory">
 			<ref bean="dtoFactory" />
 		</property>
 	</bean>
 
-	<bean id="travelsServiceTarget" class="bd2.Muber.services.impl.TravelsServiceImpl"
+	<bean id="driverServiceTarget" class="bd2.Muber.services.impl.DriverServiceImpl"
 		parent="baseService">
 	</bean>
 
-	<bean id="travelsService"
+	<bean id="driverService"
 		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 		<property name="transactionManager">
 			<ref bean="transactionManager" />
 		</property>
 		<property name="target">
-			<ref bean="travelsServiceTarget" />
+			<ref bean="driverServiceTarget" />
 		</property>
 		<property name="transactionAttributes">
 			<props>
@@ -135,12 +118,85 @@
 		</property>
 	</bean>
 	
-	<bean id="serviceLocator" class="bd2.Muber.services.ServiceLocator"
-		factory-method="getInstance">
-		<property name="travelsService">
-			<ref bean="travelsService" />
+	<bean id="passengerServiceTarget" class="bd2.Muber.services.impl.PassengerServiceImpl"
+		parent="baseService">
+	</bean>
+
+	<bean id="passengerService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="passengerServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
 		</property>
 	</bean>
+	
+	<bean id="qualificationServiceTarget" class="bd2.Muber.services.impl.QualificationServiceImpl"
+		parent="baseService">
+	</bean>
+
+	<bean id="qualificationService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="qualificationServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="travelServiceTarget" class="bd2.Muber.services.impl.TravelServiceImpl"
+		parent="baseService">
+	</bean>
+
+	<bean id="travelService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<property name="target">
+			<ref bean="travelServiceTarget" />
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+<!-- End Services -->
+	
+	
+<!-- Start of Service Locator -->
+	<bean id="serviceLocator" class="bd2.Muber.services.ServiceLocator"
+		factory-method="getInstance">
+		<property name="driverService">
+			<ref bean="driverService" />
+		</property>
+		<property name="passengerService">
+			<ref bean="passengerService" />
+		</property>
+		<property name="qualificationService">
+			<ref bean="qualificationService" />
+		</property>
+		<property name="travelService">
+			<ref bean="travelService" />
+		</property>
+		<property name="dtoFactory">
+			<ref bean="dtoFactory" />
+		</property>
+	</bean>
+<!-- End of Service Locator -->
 	
 </beans>
    
