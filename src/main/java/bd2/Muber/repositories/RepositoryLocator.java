@@ -27,11 +27,11 @@ public class RepositoryLocator {
     	return driverRepository;
 	}
 	
-	public static void setTripRepository(TravelRepository repository){
+	public static void setTravelRepository(TravelRepository repository){
     	travelRepository = repository;
 	}
  
-	public static TravelRepository getTripRepository(){
+	public static TravelRepository getTravelRepository(){
     	return travelRepository;
 	}
 	
