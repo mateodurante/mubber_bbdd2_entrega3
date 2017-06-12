@@ -40,6 +40,10 @@ public class Passenger extends User {
 		this.totalCredit -= cost;
 	}
 
+	public void addCredit(float amount) {
+		this.totalCredit += amount;
+	}
+
 	public Long getIdPassenger() {
 		return idPassenger;
 	}

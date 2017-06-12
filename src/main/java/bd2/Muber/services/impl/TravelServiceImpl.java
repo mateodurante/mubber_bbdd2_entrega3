@@ -9,32 +9,32 @@ public class TravelServiceImpl extends BaseServiceImpl implements TravelService 
 
 	@Override
 	public TravelDTO findById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return travelRepository.getTravel(id);
 	}
 
 	@Override
 	public List<TravelDTO> findAllClosedTravels() {
-		// TODO Auto-generated method stub
-		return null;
+		return travelRepository.getFinalizedTravels();
 	}
 
 	@Override
-	public boolean updateTravel(Long travelId, Long passengerId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addPassengerToTravel(Long travelId, Long passengerId) {
+		return travelRepository.addPassengerToTravel(travelId, passengerId);
 	}
 
 	@Override
 	public String closeTravel(Long travelId) {
-		// TODO Auto-generated method stub
-		return null;
+		return travelRepository.closeTravel(travelId);
 	}
 
 	@Override
 	public boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
-		// TODO Auto-generated method stub
-		return false;
+		return travelRepository.saveTravel(idDriver, origin, destiny, maxPassengers, totalCost);
+	}
+
+	@Override
+	public List<TravelDTO> findAllOpenedTravels() {
+		return travelRepository.getOpenedTravels();
 	}
 
 }

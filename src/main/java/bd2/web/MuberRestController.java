@@ -32,6 +32,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.google.gson.Gson;
 
 import bd2.Muber.model.*;
+import bd2.Muber.services.ServiceLocator;
+import bd2.Muber.services.TravelService;
 
 @ControllerAdvice
 @RequestMapping("/services")
@@ -241,24 +243,12 @@ public class MuberRestController {
 	 */
 	@RequestMapping(value = "/viajes/nuevo", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json,application/xml", consumes = {"application/xml", "application/json"} )
 	public ResponseEntity<?> crearViaje(@RequestBody Travel travel){	
-		Session session = this.getSession();
-		// Iniciamos la transacción
-		Transaction t = session.beginTransaction();
-		Driver driver = (Driver) session.get(Driver.class, travel.getDriver().getIdDriver());
-		// Chequear si existe el conductor:
-		if (driver == null){
-			return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
+		TravelService service = ServiceLocator.getTravelService();			
+
+		if (service.saveTravel(travel.getDriver().getIdDriver(), travel.getOrigin(), travel.getDestiny(), travel.getMaxPassengers(), travel.getTotalCost())) {
+			this.response();
 		}
-		// Ahora recupero Muber (la aplicación) para agregarle el viaje.
-		Muber muber = (Muber) session.get(Muber.class, (long) 1);
-		//driver.addTravel(travel);
-		Date date = new Date();
-		travel.setDate(date);
-		travel.setDriver(driver);
-		muber.addTravel(travel);
-		t.commit();
-		session.close();
-		return this.response();
+		return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
 	}
 
 	@RequestMapping(value = "/viajes/agregarPasajero", method = RequestMethod.PUT, produces = "application/json")
