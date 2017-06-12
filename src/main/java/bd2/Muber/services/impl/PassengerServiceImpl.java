@@ -29,8 +29,8 @@ public class PassengerServiceImpl extends BaseServiceImpl implements bd2.Muber.s
 	}
 
 	@Override
-	public void updateTotalCredit(Long passengerId, float amount) {
-		passengerRepository.updateTotalCredit(passengerId, amount);
+	public PassengerDTO updateTotalCredit(Long passengerId, float amount) {
+		return passengerRepository.updateTotalCredit(passengerId, amount);
 	}
 
 }

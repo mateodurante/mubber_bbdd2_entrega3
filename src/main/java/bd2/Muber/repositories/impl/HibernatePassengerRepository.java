@@ -53,7 +53,7 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 	}
 
 	@Override
-	public void updateTotalCredit(Long passengerId, float amount) {
+	public PassengerDTO updateTotalCredit(Long passengerId, float amount) {
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
 		
@@ -62,11 +62,17 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		query.setParameter(0, passengerId);
 		Passenger aPassenger = (Passenger) query.uniqueResult();
 		
+		if (aPassenger == null){
+			return null;
+		}
+		
 		session.saveOrUpdate(aPassenger);
 		aPassenger.addCredit(amount);
 		tx.commit();
 		session.disconnect();
 		session.close();
+		
+		return new PassengerDTO(aPassenger);
 	}
 /*
 	public void savePassenger(String username, String password, int totalCredit) {

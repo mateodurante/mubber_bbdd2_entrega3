@@ -10,6 +10,6 @@ public interface PassengerService {
 	List<PassengerDTO> findAllPassengers();
 	void savePassenger(PassengerDTO aPassenger);
 	void updatePassenger(PassengerDTO aPassenger);
-	void updateTotalCredit(Long passengerId, float amount);
+	PassengerDTO updateTotalCredit(Long passengerId, float amount);
 
 }

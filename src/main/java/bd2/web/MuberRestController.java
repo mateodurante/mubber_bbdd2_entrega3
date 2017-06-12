@@ -31,9 +31,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
 
-import bd2.Muber.dto.DriverDTO;
+import bd2.Muber.dto.*;
 import bd2.Muber.model.*;
 import bd2.Muber.services.DriverService;
+import bd2.Muber.services.PassengerService;
 import bd2.Muber.services.ServiceLocator;
 import bd2.Muber.services.TravelService;
 
@@ -96,12 +97,12 @@ public class MuberRestController {
 		return driverMap;
 	}
 	
-	protected Map<String, Object> getPassengerToMap(Passenger passenger){
+	protected Map<String, Object> getPassengerToMap(PassengerDTO currentPassenger){
 		Map<String, Object> passengerMap = new HashMap<String, Object>();
-		passengerMap.put("userId", passenger.getIdUser());
-		passengerMap.put("username", passenger.getUsername());
-		passengerMap.put("admissionDate", passenger.getAdmissionDate());
-		passengerMap.put("totalCredits", passenger.getTotalCredit());
+		passengerMap.put("userId", currentPassenger.getIdUser());
+		passengerMap.put("username", currentPassenger.getUsername());
+		passengerMap.put("admissionDate", currentPassenger.getAdmissionDate());
+		passengerMap.put("totalCredits", currentPassenger.getTotalCredit());
 		return passengerMap;
 	}
 	
@@ -136,13 +137,12 @@ public class MuberRestController {
 	@RequestMapping(value = "/pasajeros", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<?> pasajeros() {
 		Map<Long, Object> aMap = new HashMap<Long, Object>();
-		Session session = this.getSession();
-		Muber muber = this.getMuber(session);
-		List<Passenger> passengers = muber.getPassengers();
-		for ( Passenger currentPassenger : passengers ){
+		PassengerService service = ServiceLocator.getPassengerService();
+		List<PassengerDTO> passengerList = service.findAllPassengers();
+		for ( PassengerDTO currentPassenger : passengerList ){
 			aMap.put(currentPassenger.getIdUser(), this.getPassengerToMap(currentPassenger));
 		}
-		session.close();
+		//session.close();
 		return this.response(HttpStatus.OK, aMap);
 	}
 
@@ -277,16 +277,12 @@ public class MuberRestController {
 	
 	@RequestMapping(value = "/pasajeros/cargarCredito", method = RequestMethod.PUT, produces = "application/json" )
 	public ResponseEntity<?> cargarCredito(@RequestParam("pasajeroId") long passengerId, @RequestParam("monto") long amount){
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		Passenger passenger = (Passenger) session.get(Passenger.class, passengerId);
-		if (passenger == null){
-			return this.response(HttpStatus.NOT_FOUND, "No existe el passengerId");
+		PassengerService service = ServiceLocator.getPassengerService();
+		PassengerDTO passengerDTO = service.updateTotalCredit(passengerId, amount);
+		if (passengerDTO != null){
+			return this.response(HttpStatus.OK, this.getPassengerToMap(passengerDTO));
 		}
-		passenger.setTotalCredit(passenger.getTotalCredit() + amount);
-		t.commit();
-		session.close();
-		return this.response(HttpStatus.OK, this.getPassengerToMap(passenger));
+		return this.response(HttpStatus.NOT_FOUND, "No existe el passengerId");
 	}
 
 	@RequestMapping(value = "/viajes/finalizar", method = RequestMethod.PUT, produces = "application/json" )
