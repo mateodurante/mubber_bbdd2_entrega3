@@ -13,7 +13,7 @@ public class TravelServiceImpl extends BaseServiceImpl implements TravelService 
 	}
 
 	@Override
-	public List<TravelDTO> findAllClosedTravels() {
+	public List<TravelDTO> findFinalizedTravels() {
 		return travelRepository.getFinalizedTravels();
 	}
 
@@ -33,7 +33,7 @@ public class TravelServiceImpl extends BaseServiceImpl implements TravelService 
 	}
 
 	@Override
-	public List<TravelDTO> findAllOpenedTravels() {
+	public List<TravelDTO> findOpenedTravels() {
 		return travelRepository.getOpenedTravels();
 	}
 

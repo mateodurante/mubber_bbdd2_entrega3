@@ -64,12 +64,12 @@ public class MuberRestController {
 		return session;
 	}
 	
-	protected Map<String, Object> travelToMap(Travel travel){
+	protected Map<String, Object> travelToMap(TravelDTO currentTravel){
 		// Se devuelve los id, origen y destino del viaje.
 		Map<String, Object> travelMap = new HashMap<String, Object>();
-		travelMap.put("travelId", travel.getIdTravel());
-		travelMap.put("origin", travel.getOrigin());
-		travelMap.put("destination", travel.getDestiny());
+		travelMap.put("travelId", currentTravel.getIdTravel());
+		travelMap.put("origin", currentTravel.getOrigin());
+		travelMap.put("destination", currentTravel.getDestiny());
 		return travelMap;
 	}
 
@@ -89,11 +89,11 @@ public class MuberRestController {
 		driverMap.put("addmissionDate", driver.getAdmissionDate());
 		driverMap.put("averageScore", driver.getQualificationAverange());
 		driverMap.put("licenceExpiration", driver.getLicenceExpiration());
-		List<Travel> travels = driver.getTravels();
-		for (Travel currentTravel: travels){
-			travelsMap.put(currentTravel.getIdTravel(), this.travelToMap(currentTravel));
-		}
-		driverMap.put("travels", travelsMap);
+		//List<TravelDTO> travels = driver.getTravels();
+		//for (TravelDTO currentTravel: travels){
+		//	travelsMap.put(currentTravel.getIdTravel(), this.travelToMap(currentTravel));
+		//}
+		//driverMap.put("travels", travelsMap);
 		return driverMap;
 	}
 	
@@ -160,34 +160,11 @@ public class MuberRestController {
 	@RequestMapping(value = "/viajes/abiertos", method = RequestMethod.GET, produces = "application/json" )
 	public ResponseEntity<?> viajesAbiertos(){
 		Map<Long, Object> aMap = new HashMap<Long, Object>();
-		Session session = this.getSession();
-		Muber muber = this.getMuber(session);
-		// TODO: Esto no me está devolviendo todos los viajes asociados a Muber, solo uno, siempre el último de la base de datos. REVISAR.
-		//List<Travel> travels = muber.getTravels();
-		List<Driver> drivers = muber.getDrivers();
-		
-		for (Driver currentDriver: drivers){
-			List<Travel> travels = currentDriver.getTravels();
-			for ( Travel currentTravel : travels ){
-				// Verifico que el viaje no esté finalizado antes de agregarlo a la lista.
-				// Falta poder listar todos los pasajeros en este viaje (se puede serializar una coleccion dentro de otra?)
-				if (!currentTravel.isFinalized()){
-					Map<String, Object> JSONTravel = new HashMap<String, Object>();
-					JSONTravel.put("idTravel", currentTravel.getIdTravel());
-					JSONTravel.put("date", currentTravel.getDate());
-					JSONTravel.put("origin", currentTravel.getOrigin());
-					JSONTravel.put("destiny", currentTravel.getDestiny());
-					JSONTravel.put("driver", currentTravel.getDriver().getUsername());
-					JSONTravel.put("maxPassenger", currentTravel.getMaxPassengers());
-					JSONTravel.put("passengerCount", currentTravel.getPassengerCount());
-					JSONTravel.put("totalCost", currentTravel.getTotalCost());
-					// Agrego el JSON a otro json:
-					aMap.put(currentTravel.getIdTravel(), JSONTravel);
-				}	
-			}
+		TravelService service = ServiceLocator.getTravelService();
+		List<TravelDTO> travelList = service.findOpenedTravels();
+		for ( TravelDTO currentTravel : travelList ){
+			aMap.put(currentTravel.getIdTravel(), this.travelToMap(currentTravel));
 		}
-		
-		session.close();
 		return this.response(HttpStatus.OK, aMap);
 	}
 
@@ -246,7 +223,7 @@ public class MuberRestController {
 		TravelService service = ServiceLocator.getTravelService();			
 
 		if (service.saveTravel(travel.getDriver().getIdDriver(), travel.getOrigin(), travel.getDestiny(), travel.getMaxPassengers(), travel.getTotalCost())) {
-			this.response();
+			return this.response();
 		}
 		return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
 	}
