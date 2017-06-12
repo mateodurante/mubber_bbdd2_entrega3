@@ -31,7 +31,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
 
+import bd2.Muber.dto.DriverDTO;
 import bd2.Muber.model.*;
+import bd2.Muber.services.DriverService;
 import bd2.Muber.services.ServiceLocator;
 import bd2.Muber.services.TravelService;
 
@@ -146,14 +148,12 @@ public class MuberRestController {
 
 	@RequestMapping(value = "/conductores", method = RequestMethod.GET, produces = "application/json" )
 	public ResponseEntity<?> conductores() {
-		Map<Long, Object> aMap = new HashMap<Long, Object>();
-		Session session = this.getSession();
-		Muber muber = this.getMuber(session);
-		List<Driver> drivers = muber.getDrivers();
-		for ( Driver currentDriver : drivers ){
-			aMap.put(currentDriver.getIdUser(), this.getDriverToMap(currentDriver));
+		Map<Long, Object> aMap = new HashMap<Long, Object>();		
+		DriverService service = ServiceLocator.getDriverService();
+		List<DriverDTO> driversList = service.findAllDrivers();
+		for (DriverDTO d : driversList){ 
+			aMap.put(d.getIdUser(), d.getUsername());
 		}
-		session.close();
 		return this.response(HttpStatus.OK, aMap);
 	}
 	
