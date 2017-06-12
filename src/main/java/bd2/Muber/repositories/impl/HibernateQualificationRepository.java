@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 
 import bd2.Muber.dto.PassengerDTO;
 import bd2.Muber.dto.QualificationDTO;
+import bd2.Muber.model.Driver;
 import bd2.Muber.model.Passenger;
 import bd2.Muber.model.Qualification;
 import bd2.Muber.model.Travel;
@@ -20,18 +21,17 @@ public class HibernateQualificationRepository extends BaseHibernateRepository im
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			
-			
+
 			String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
 			Query query = session.createQuery(hql);
 			query.setParameter(0, idPassenger);
 			Passenger aPassenger = (Passenger) query.uniqueResult();
-			 
 			
 			String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
 			Query query1 = session.createQuery(hql1);
 			query1.setParameter(0, idTravel);
 			Travel aTravel = (Travel) query1.uniqueResult();
+						
 			Qualification aQualification = new Qualification(points, comment, aPassenger, aTravel);
 			
 			session.save(aQualification);

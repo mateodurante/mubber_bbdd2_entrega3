@@ -4,20 +4,21 @@ import java.util.GregorianCalendar;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import bd2.Muber.model.*;
+import bd2.Muber.repositories.impl.BaseHibernateRepository;
 
 public class App {
 
 	public static void main(String[] args) {
-		Configuration conf = new Configuration().configure("hibernate/hibernate.cfg.xml");
-		ServiceRegistry sr = new StandardServiceRegistryBuilder().applySettings(conf.getProperties()).build();
-		SessionFactory sf = conf.buildSessionFactory(sr);
-		Session session = sf.openSession();
-		session.beginTransaction();
+		Session session = new BaseHibernateRepository().getSession();
+		
+		Transaction tx = null;
+		
 		System.out.println("Transacción creada.");
 		System.out.println("Creando y guardando Muber...");
 		Muber muber = new Muber();
@@ -130,7 +131,6 @@ public class App {
 		session.getTransaction().commit();
 		session.flush();
 		session.close();
-		sf.close();
 		System.out.println("Terminado.");
 	}
 

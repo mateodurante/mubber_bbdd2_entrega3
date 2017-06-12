@@ -16,7 +16,7 @@ public class TravelDTO {
 	private int maxPassengers;
 	private boolean finalized;
 	private List<Passenger> passengers;
-	private Driver driver;
+	private DriverDTO driver;
 	
 	public TravelDTO(){
 	}
@@ -97,11 +97,11 @@ public class TravelDTO {
 		this.passengers = passengers;
 	}
 	
-	public Driver getDriver() {
+	public DriverDTO getDriver() {
 		return driver;
 	}
 	
 	public void setDriver(Driver driver) {
-		this.driver = driver;
+		this.driver = new DriverDTO(driver);
 	}
 }

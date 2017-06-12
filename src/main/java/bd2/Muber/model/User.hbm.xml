@@ -9,24 +9,24 @@
             <!-- https://stackoverflow.com/questions/33103355/hilo-generator-strategy-not-working -->
             <generator class="increment" />
         </id>
-        <property name="username" type="java.lang.String">
+        <property name="username" type="java.lang.String" not-null="true">
             <column name="USERNAME" />
         </property>
-        <property name="password" type="java.lang.String">
+        <property name="password" type="java.lang.String" not-null="true">
             <column name="PASSWORD" />
         </property>
-        <property name="admissionDate" type="java.util.Date">
+        <property name="admissionDate" type="java.util.Date" not-null="true">
             <column name="ADMISSIONDATE" />
         </property>
         <!-- Subclases de la clase de USER_MUBER -->
         <union-subclass name="bd2.Muber.model.Driver" table="DRIVER">
         	<list name="travels" inverse="true" table="TRAVEL" lazy="true" cascade="all">
-        	    <key column="IDDRIVER" />
+        	    <key column="IDDRIVER" not-null="true"/>
         	    <list-index></list-index>
         	    <one-to-many class="bd2.Muber.model.Travel" />
         	</list>
         	<list name="qualifications" inverse="false" table="QUALIFICATION" lazy="true" cascade="all">
-        	    <key column="IDDRIVER" />
+        	    <key column="IDDRIVER" not-null="true"/>
         	    <list-index></list-index>
         	    <one-to-many class="bd2.Muber.model.Qualification" />
         	</list>
@@ -36,13 +36,13 @@
 		</union-subclass>
 		<union-subclass name="bd2.Muber.model.Passenger" table="PASSENGER">
 	        <list name="travels" inverse="true" table="TRAVEL_PASSENGER" lazy="true" cascade="all">
-        	    <key column="IDPASSENGER" />
+        	    <key column="IDPASSENGER" not-null="false"/>
 	            <list-index></list-index>
 	            <many-to-many column="IDTRAVEL" 
 	            	class="bd2.Muber.model.Travel" />
 	        </list>
-	        <property name="totalCredit" type="float">
-	            <column name="TOTALCREDIT" />
+	        <property name="totalCredit" type="float" not-null="false">
+	            <column name="TOTALCREDIT"  not-null="false"/>
 	        </property>
 		</union-subclass>
     </class>

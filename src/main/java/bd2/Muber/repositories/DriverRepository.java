@@ -9,5 +9,5 @@ public interface DriverRepository extends BaseRepository {
 	DriverDTO getDriver(Long driverId);
 	List<DriverDTO> getDrivers();
 	List<DriverDTO> getDriversTop10();
-	
+	public void cargarDatos();
 }

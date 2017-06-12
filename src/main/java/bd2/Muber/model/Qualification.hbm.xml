@@ -14,11 +14,11 @@
         <property name="comment" type="java.lang.String">
             <column name="COMMENT" />
         </property>
-        <many-to-one name="passenger" class="bd2.Muber.model.Passenger" unique="true" fetch="join">
-            <column name="IDPASSENGER" />
+        <many-to-one name="passenger" class="bd2.Muber.model.Passenger" unique="true" fetch="join" not-null="false">
+            <column name="IDPASSENGER"  not-null="false"/>
         </many-to-one>
-        <many-to-one name="travel" class="bd2.Muber.model.Travel" unique="true" fetch="join">
-            <column name="IDTRAVEL" />
+        <many-to-one name="travel" class="bd2.Muber.model.Travel" unique="true" fetch="join" not-null="false">
+            <column name="IDTRAVEL"  not-null="false"/>
         </many-to-one>
     </class>
 </hibernate-mapping>

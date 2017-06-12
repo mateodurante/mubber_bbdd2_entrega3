@@ -23,8 +23,8 @@ public class TravelServiceImpl extends BaseServiceImpl implements TravelService 
 	}
 
 	@Override
-	public String closeTravel(Long travelId) {
-		return travelRepository.closeTravel(travelId);
+	public boolean finalizeTravel(Long travelId) {
+		return travelRepository.finalizeTravel(travelId);
 	}
 
 	@Override

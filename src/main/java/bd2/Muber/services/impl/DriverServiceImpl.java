@@ -22,4 +22,9 @@ public class DriverServiceImpl extends BaseServiceImpl implements DriverService 
 		return driverRepository.getDriversTop10();
 	}
 
+	@Override
+	public void cargarDatos() {
+		driverRepository.cargarDatos();
+	}
+
 }

@@ -35,6 +35,7 @@ import bd2.Muber.dto.*;
 import bd2.Muber.model.*;
 import bd2.Muber.services.DriverService;
 import bd2.Muber.services.PassengerService;
+import bd2.Muber.services.QualificationService;
 import bd2.Muber.services.ServiceLocator;
 import bd2.Muber.services.TravelService;
 
@@ -180,22 +181,19 @@ public class MuberRestController {
 		O
 		curl -H "Content-Type: application/json" -X POST -d '{"points": 2, "comment": "Esto es un comentario re piola ;)", "travel" : { "idTravel": 1 }, "passenger": { "idPassenger": 3 }}' http://localhost:8080/MuberRESTful/rest/services/viajes/calificar
 	*/
-	@RequestMapping(value = "/viajes/calificar", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json,application/xml", consumes = {"application/xml", "application/json"} )
-	public ResponseEntity<?> calificarViaje(@RequestBody Qualification qualification){	
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		Passenger passenger = (Passenger) session.get(Passenger.class, qualification.getPassenger().getIdPassenger());
-		Travel travel = (Travel) session.get(Travel.class, qualification.getTravel().getIdTravel());
-		if (passenger == null){
-			return this.response(HttpStatus.NOT_FOUND, "No existe el passengerId");
+	@RequestMapping(value = "/viajes/calificar", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<?> calificarViaje(
+			@RequestParam("viajeId") long viajeId, 
+			@RequestParam("pasajeroId") long pasajeroId,
+			@RequestParam("puntaje") int puntaje,
+			@RequestParam("comentario") String comentario){
+		
+		QualificationService service = ServiceLocator.getQualificationService();
+
+		if (service.saveQualification(viajeId, pasajeroId, puntaje, comentario)) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
-		if (travel == null){
-			return this.response(HttpStatus.NOT_FOUND, "No existe el travelId");
-		}
-		passenger.qualify(travel, qualification);
-		t.commit();
-		session.close();
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+		return this.response(HttpStatus.NOT_FOUND, "No se pudo calificar el viaje");
 	}
 	
 	@RequestMapping(value = "/conductores/detalle/{conductorId}", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
@@ -218,37 +216,29 @@ public class MuberRestController {
 		  "driver": { "idDriver": 4 }
 		}
 	 */
-	@RequestMapping(value = "/viajes/nuevo", method = RequestMethod.POST, produces = "application/json", headers = "Accept=application/json,application/xml", consumes = {"application/xml", "application/json"} )
-	public ResponseEntity<?> crearViaje(@RequestBody Travel travel){	
+	@RequestMapping(value = "/viajes/nuevo", method = RequestMethod.POST, produces = "application/json" )
+	public ResponseEntity<?> crearViaje(
+			@RequestParam("origen") String origin,
+			@RequestParam("destino") String destiny,
+			@RequestParam("conductorId") long idDriver,
+			@RequestParam("costoTotal") float totalCost,
+			@RequestParam("cantidadPasajeros") int maxPassengers
+			){	
 		TravelService service = ServiceLocator.getTravelService();			
 
-		if (service.saveTravel(travel.getDriver().getIdDriver(), travel.getOrigin(), travel.getDestiny(), travel.getMaxPassengers(), travel.getTotalCost())) {
+		if (service.saveTravel(idDriver, origin, destiny, maxPassengers, totalCost)) {
 			return this.response();
 		}
-		return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
+		return this.response(HttpStatus.NOT_FOUND, "No se pudo agregar el viaje, tal vez no existe el conductor");
 	}
 
 	@RequestMapping(value = "/viajes/agregarPasajero", method = RequestMethod.PUT, produces = "application/json")
 	public ResponseEntity<?> agregarPasajero(@RequestParam long viajeId, @RequestParam long pasajeroId){
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		Travel travel = (Travel) session.get(Travel.class, viajeId);//Long.parseLong(request.getParameter("viajeId")));
-		Passenger passenger = (Passenger) session.get(Passenger.class, pasajeroId);//Long.parseLong(request.getParameter("pasajeroId")));
-		if (travel == null) {
-			/* no existe el viaje */
-			return this.response(HttpStatus.NOT_FOUND, "No existe el travelId.");
-		}
-		if (passenger == null) {
-			/* no existe el pasajero */
-			return this.response(HttpStatus.NOT_FOUND, "No existe el pasajeroId.");
-		}
-		if (passenger.addTravel(travel)) {
-			/* se agrego correctamente */
-			t.commit();
-			session.close();
+		TravelService service = ServiceLocator.getTravelService();
+
+		if(service.addPassengerToTravel(viajeId, pasajeroId)){
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
-		/* no se pudo agregar por  */
 		return this.response(HttpStatus.BAD_REQUEST, "No se puede agregar el pasajero al viaje indicado.");
 	}
 	
@@ -264,19 +254,12 @@ public class MuberRestController {
 
 	@RequestMapping(value = "/viajes/finalizar", method = RequestMethod.PUT, produces = "application/json" )
 	public ResponseEntity<?> finalizarViaje(@RequestParam("viajeId") long travelId){
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		Travel travel = (Travel) session.get(Travel.class, travelId);
-		if (travel == null){
-			return this.response(HttpStatus.NOT_FOUND, "No existe el travelId");
+		TravelService service = ServiceLocator.getTravelService();
+
+		if(service.finalizeTravel(travelId)){
+			return this.response();
 		}
-		if (travel.isFinalized()){
-			return this.response(HttpStatus.ALREADY_REPORTED, "Ya se encuentra finalizado");
-		}
-		travel.finalize();
-		t.commit();
-		session.close();
-		return this.response();
+		return this.response(HttpStatus.BAD_REQUEST, "El viaje ya fue finalizado o no existe.");
 	}
 
 	@RequestMapping(value = "/conductores/top10", method = RequestMethod.GET, produces = "application/json" )
@@ -289,5 +272,12 @@ public class MuberRestController {
 		}
 		session.close();
 		return this.response(HttpStatus.OK, aMap);
+	}
+
+	@RequestMapping(value = "/cargarDatos", method = RequestMethod.GET, produces = "application/json" )
+	public ResponseEntity<?> cargarDatos(){
+		DriverService service = ServiceLocator.getDriverService();
+		service.cargarDatos();
+		return this.response();
 	}
 }

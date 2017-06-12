@@ -10,7 +10,7 @@ public interface TravelService {
 	List<TravelDTO> findFinalizedTravels();
 	List<TravelDTO> findOpenedTravels();
 	boolean addPassengerToTravel(Long travelId, Long passengerId);
-	String closeTravel (Long travelId);
+	boolean finalizeTravel (Long travelId);
 	boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost);
 
 }

@@ -9,5 +9,5 @@ public interface DriverService {
 	DriverDTO findById(Long id);
 	List<DriverDTO> findAllDrivers();
 	List<DriverDTO> getDriversTop10();
-
+	public void cargarDatos();
 }

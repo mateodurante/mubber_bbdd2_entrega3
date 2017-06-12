@@ -8,8 +8,8 @@ public class QualificationDTO {
 	private Long idQualification;
 	private int points;
 	private String comment;
-	private Passenger passenger;
-	private Travel travel;
+	private PassengerDTO passenger;
+	private TravelDTO travel;
 	
 	public QualificationDTO(){
 	}
@@ -46,19 +46,19 @@ public class QualificationDTO {
 		this.comment = comment;
 	}
 	
-	public Passenger getPassenger() {
+	public PassengerDTO getPassenger() {
 		return passenger;
 	}
 	
 	public void setPassenger(Passenger passenger) {
-		this.passenger = passenger;
+		this.passenger = new PassengerDTO(passenger);
 	}
 	
-	public Travel getTravel() {
+	public TravelDTO getTravel() {
 		return travel;
 	}
 	
 	public void setTravel(Travel travel) {
-		this.travel = travel;
+		this.travel = new TravelDTO(travel);
 	}
 }

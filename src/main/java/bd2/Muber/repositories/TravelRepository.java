@@ -7,9 +7,9 @@ public interface TravelRepository extends BaseRepository {
 
 	List<TravelDTO> getTravels();
 	TravelDTO getTravel(Long id);
-	Boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost);
-	Boolean addPassengerToTravel(Long travelId, Long passengerId);
-	String closeTravel(Long travelId);
+	boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost);
+	boolean addPassengerToTravel(Long travelId, Long passengerId);
+	boolean finalizeTravel(Long travelId);
 	List<TravelDTO> getFinalizedTravels();
 	List<TravelDTO> getOpenedTravels();
 

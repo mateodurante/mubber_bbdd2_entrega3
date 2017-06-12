@@ -42,7 +42,7 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public Boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
+	public boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
 		Session session = this.getSession();
 		Transaction tx = null;
 		try {
@@ -70,10 +70,11 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public Boolean addPassengerToTravel(Long travelId, Long passengerId) {
+	public boolean addPassengerToTravel(Long travelId, Long passengerId) {
+		Session session = this.getSession();
+		Transaction tx = null;
 		try {
-			Session session = this.getSession();
-			Transaction tx = session.beginTransaction();
+			tx = session.beginTransaction();
 			
 			String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
 			Query query = session.createQuery(hql);
@@ -85,8 +86,8 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 			query1.setParameter(0, travelId);
 			Travel aTravel = (Travel) query1.uniqueResult();
 		
-			session.saveOrUpdate(aTravel);
 			if (aTravel.addPassenger(aPassenger)){
+				session.saveOrUpdate(aTravel);
 				tx.commit();
 				session.disconnect();
 				session.close();
@@ -104,20 +105,29 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public String closeTravel(Long travelId) {
+	public boolean finalizeTravel(Long travelId) {
 		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
-		 
-		String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
-		Query query1 = session.createQuery(hql1);
-		query1.setParameter(0, travelId);
-		Travel aTravel = (Travel) query1.uniqueResult();
-	
-		session.saveOrUpdate(aTravel);
-		aTravel.finalize();
-		tx.commit();
-		session.close();
-		return "Viaje Finalizado";
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			
+			String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
+			Query query1 = session.createQuery(hql1);
+			query1.setParameter(0, travelId);
+			Travel aTravel = (Travel) query1.uniqueResult();
+		
+			aTravel.finalize();
+			session.saveOrUpdate(aTravel);
+			tx.commit();
+			session.close();
+			return true;
+		} catch (Exception e) {
+			if (tx != null)
+				tx.rollback();
+				session.disconnect();
+				session.close();
+				return false;
+		}
 	}
 
 	@Override
