@@ -10,4 +10,5 @@ public interface DriverService {
 	List<DriverDTO> findAllDrivers();
 	List<DriverDTO> getDriversTop10();
 	public void cargarDatos();
+	public List<DriverDTO> getTop10DriversWithoutOpenTravels();
 }

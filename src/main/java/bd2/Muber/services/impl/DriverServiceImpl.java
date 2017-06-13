@@ -27,4 +27,9 @@ public class DriverServiceImpl extends BaseServiceImpl implements DriverService 
 		driverRepository.cargarDatos();
 	}
 
+	@Override
+	public List<DriverDTO> getTop10DriversWithoutOpenTravels() {
+	    return driverRepository.getTop10DriversWithoutOpenTravels();
+	}
+
 }

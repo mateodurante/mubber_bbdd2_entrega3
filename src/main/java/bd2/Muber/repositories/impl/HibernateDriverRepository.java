@@ -1,6 +1,7 @@
 package bd2.Muber.repositories.impl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -65,6 +66,51 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 	public List<DriverDTO> getDriversTop10() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<DriverDTO> getTop10DriversWithoutOpenTravels(){
+		Session session = this.getSession();
+		Transaction tx = null;
+		
+		String hql = "SELECT D FROM bd2.Muber.model.Driver as D "
+			+ "INNER JOIN bd2.Muber.model.Qualification as Q "
+			+ "ON D.idUser = Q.travel.driver.idUser "
+			+ "WHERE D.idUser NOT IN ( "
+			+ "SELECT T.driver.idUser "
+			+ "FROM bd2.Muber.model.Travel as T "
+			+ "WHERE T.finalized = 0) "
+			+ "ORDER BY Q.points DESC ";
+	
+		Query query = session.createQuery(hql);
+		//query.setMaxResults(10);
+		
+		List<Driver> result = query.list();
+		
+		List<DriverDTO> driversDTO = new ArrayList<DriverDTO>();
+		for (Driver d : result) {
+			DriverDTO dri = new DriverDTO(d);
+			driversDTO.add(dri);
+		}
+		
+		tx.rollback();
+		session.disconnect();
+		session.close();
+		return driversDTO;
+		/*
+		List<Driver> top10 = new ArrayList<Driver>();
+		for (Driver currentDriver : this.drivers){
+			if (!currentDriver.hasOpenTravels()){
+				top10.add(currentDriver);
+			}
+		}
+		top10.sort(new Comparator<Driver>() {
+			public int compare(Driver d1, Driver d2){
+				return d2.getQualificationAverange().compareTo(d1.getQualificationAverange());
+			}
+		});
+		
+		return (List<Driver>) top10.subList(0, top10.size() > 10? 10 : top10.size() );
+		*/
 	}
 	
 	public void cargarDatos(){
