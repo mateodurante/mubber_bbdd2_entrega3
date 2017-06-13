@@ -1,6 +1,6 @@
 package bd2.Muber.dto;
 
-import java.util.List;
+import java.util.Set;
 
 import bd2.Muber.model.Passenger;
 import bd2.Muber.model.Travel;
@@ -8,7 +8,7 @@ import bd2.Muber.model.Travel;
 public class PassengerDTO extends UserDTO {
 	private Long idPassenger;
 	private float totalCredit;
-	private List<Travel> travels;
+	private Set<Travel> travels;
 	
 	public PassengerDTO(){
 	}
@@ -27,11 +27,11 @@ public class PassengerDTO extends UserDTO {
 		this.idPassenger = idPassenger;
 	}
 
-	public List<Travel> getTravels() {
+	public Set<Travel> getTravels() {
 		return travels;
 	}
 
-	public void setTravels(List<Travel> travels) {
+	public void setTravels(Set<Travel> travels) {
 		this.travels = travels;
 	}
 

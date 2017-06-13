@@ -8,26 +8,23 @@
             <column name="IDMUBER" />
             <generator class="native" />
         </id>
-        <list name="passengers" inverse="false" table="PASSENGER" lazy="true" cascade="all">
+        <set name="passengers" inverse="false" table="PASSENGER" lazy="true" cascade="all">
             <key>
                 <column name="IDMUBER" />
             </key>
-            <list-index></list-index>
             <one-to-many class="bd2.Muber.model.Passenger" />
-        </list>
-        <list name="drivers" inverse="false" table="DRIVER" lazy="true" cascade="all">
+        </set>
+        <set name="drivers" inverse="false" table="DRIVER" lazy="true" cascade="all">
             <key>
                 <column name="IDMUBER" />
             </key>
-            <list-index></list-index>
             <one-to-many class="bd2.Muber.model.Driver" />
-        </list>
-        <list name="travels" inverse="false" table="TRAVEL" lazy="true" cascade="all">
+        </set>
+        <set name="travels" inverse="false" table="TRAVEL" lazy="true" cascade="all">
             <key>
                 <column name="IDMUBER" />
             </key>
-            <list-index></list-index>
             <one-to-many class="bd2.Muber.model.Travel" />
-        </list>
+        </set>
     </class>
 </hibernate-mapping>

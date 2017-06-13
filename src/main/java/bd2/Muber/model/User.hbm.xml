@@ -20,27 +20,24 @@
         </property>
         <!-- Subclases de la clase de USER_MUBER -->
         <union-subclass name="bd2.Muber.model.Driver" table="DRIVER">
-        	<list name="travels" inverse="true" table="TRAVEL" lazy="true" cascade="all">
+        	<set name="travels" inverse="true" table="TRAVEL" lazy="true" cascade="all">
         	    <key column="IDDRIVER" not-null="true"/>
-        	    <list-index></list-index>
         	    <one-to-many class="bd2.Muber.model.Travel" />
-        	</list>
-        	<list name="qualifications" inverse="false" table="QUALIFICATION" lazy="true" cascade="all">
+        	</set>
+        	<set name="qualifications" inverse="false" table="QUALIFICATION" lazy="true" cascade="all">
         	    <key column="IDDRIVER" not-null="true"/>
-        	    <list-index></list-index>
         	    <one-to-many class="bd2.Muber.model.Qualification" />
-        	</list>
+        	</set>
         	<property name="licenceExpiration" type="java.util.Date">
         	    <column name="LICENCEEXPIRATION" />
         	</property>
 		</union-subclass>
 		<union-subclass name="bd2.Muber.model.Passenger" table="PASSENGER">
-	        <list name="travels" inverse="true" table="TRAVEL_PASSENGER" lazy="true" cascade="all">
+	        <set name="travels" inverse="true" table="TRAVEL_PASSENGER" lazy="true" cascade="all">
         	    <key column="IDPASSENGER" not-null="false"/>
-	            <list-index></list-index>
 	            <many-to-many column="IDTRAVEL" 
 	            	class="bd2.Muber.model.Travel" />
-	        </list>
+	        </set>
 	        <property name="totalCredit" type="float" not-null="false">
 	            <column name="TOTALCREDIT"  not-null="false"/>
 	        </property>

@@ -1,24 +1,26 @@
 package bd2.Muber.model;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 public class Muber {
 	private Long idMuber;
-	private List<Passenger> passengers;
-	private List<Driver> drivers;
-	private List<Travel> travels;
+	private Set<Passenger> passengers;
+	private Set<Driver> drivers;
+	private Set<Travel> travels;
 
 	public Muber() {
 		super();
-		this.passengers = new ArrayList<Passenger>();
-		this.drivers = new ArrayList<Driver>();
-		this.travels = new ArrayList<Travel>();
+		this.passengers = new HashSet<Passenger>();
+		this.drivers = new HashSet<Driver>();
+		this.travels = new HashSet<Travel>();
 	}
 	
-	public Muber(List<Passenger> passengers, List<Driver> drivers, List<Travel> travels) {
+	public Muber(Set<Passenger> passengers, Set<Driver> drivers, Set<Travel> travels) {
 		super();
 		this.passengers = passengers;
 		this.drivers = drivers;
@@ -45,7 +47,7 @@ public class Muber {
 		this.drivers.add(driver);
 	}
 
-	public void addDrivers(List<Driver> drivers){
+	public void addDrivers(Set<Driver> drivers){
 		this.drivers.addAll(drivers);
 	}
 	
@@ -53,7 +55,7 @@ public class Muber {
 		this.passengers.add(passenger);
 	}
 
-	public void addPassengers(List<Passenger> passengers){
+	public void addPassengers(Set<Passenger> passengers){
 		this.passengers.addAll(passengers);
 	}
 	
@@ -61,7 +63,7 @@ public class Muber {
 		this.travels.add(travel);
 	}
 
-	public void addtravels(List<Travel> travels){
+	public void addtravels(Set<Travel> travels){
 		this.travels.addAll(travels);
 	}
 
@@ -73,27 +75,27 @@ public class Muber {
 		this.idMuber = idMuber;
 	}
 	
-	public List<Travel> getTravels() {
+	public Set<Travel> getTravels() {
 		return this.travels;
 	}
 	
-	public void setTravels(List<Travel> travels) {
+	public void setTravels(Set<Travel> travels) {
 		this.travels = travels;
 	}
 	
-	public List<Passenger> getPassengers() {
+	public Set<Passenger> getPassengers() {
 		return this.passengers;
 	}
 	
-	public void setPassengers(List<Passenger> passengers) {
+	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
 	}
 	
-	public List<Driver> getDrivers() {
+	public Set<Driver> getDrivers() {
 		return this.drivers;
 	}
 	
-	public void setDrivers(List<Driver> drivers) {
+	public void setDrivers(Set<Driver> drivers) {
 		this.drivers = drivers;
 	}
 	

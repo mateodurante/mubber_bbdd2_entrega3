@@ -1,9 +1,9 @@
 package bd2.Muber.model;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 public class Travel {
 	private Long idTravel;
@@ -13,7 +13,7 @@ public class Travel {
 	private Date date;
 	private int maxPassengers;
 	private boolean finalized;
-	private List<Passenger> passengers;
+	private Set<Passenger> passengers;
 	private Driver driver;
 	
 	public Travel(){
@@ -28,7 +28,7 @@ public class Travel {
 		this.totalCost = totalCost;
 		this.date = new Date();
 		this.finalized = false;
-		this.passengers = new ArrayList<Passenger>();
+		this.passengers = new HashSet<Passenger>();
 	}
 
 	public boolean addPassenger(Passenger passenger) {
@@ -106,11 +106,11 @@ public class Travel {
 		this.finalized = finalized;
 	}
 	
-	public List<Passenger> getPassengers() {
+	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
 	
-	public void setPassengers(List<Passenger> passengers) {
+	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
 	}
 	

@@ -1,12 +1,12 @@
 package bd2.Muber.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Passenger extends User {
 	private Long idPassenger;
 	private float totalCredit;
-	private List<Travel> travels;
+	private Set<Travel> travels;
 	
 	public Passenger(){
 		super();
@@ -15,7 +15,7 @@ public class Passenger extends User {
 	public Passenger(String username, String password, float totalCredit) {
 		super(username, password);
 		this.totalCredit = totalCredit;
-		this.travels = new ArrayList<Travel>();
+		this.travels = new HashSet<Travel>();
 	}
 
 	public boolean addTravel(Travel travel) {
@@ -52,11 +52,11 @@ public class Passenger extends User {
 		this.idPassenger = idPassenger;
 	}
 
-	public List<Travel> getTravels() {
+	public Set<Travel> getTravels() {
 		return travels;
 	}
 
-	public void setTravels(List<Travel> travels) {
+	public void setTravels(Set<Travel> travels) {
 		this.travels = travels;
 	}
 

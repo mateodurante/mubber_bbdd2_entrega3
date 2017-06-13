@@ -1,23 +1,22 @@
 package bd2.Muber.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Driver extends User {
 	private Long idDriver;
 	private Date licenceExpiration;
-	private List<Travel> travels;
-	private List<Qualification> qualifications;
+	private Set<Travel> travels;
+	private Set<Qualification> qualifications;
 	
 	public Driver(){
 	}
 	
 	public Driver(String username, String password, Date licenceExpiration) {
 		super(username, password);
-		this.travels = new ArrayList<Travel>();
-		this.qualifications = new ArrayList<Qualification>();
+		this.travels = new HashSet<Travel>();
+		this.qualifications = new HashSet<Qualification>();
 		this.licenceExpiration = licenceExpiration;
 	}
 	
@@ -74,19 +73,19 @@ public class Driver extends User {
 		this.idDriver = idDriver;
 	}
 
-	public List<Travel> getTravels() {
+	public Set<Travel> getTravels() {
 		return travels;
 	}
 
-	public void setTravels(List<Travel> travels) {
+	public void setTravels(Set<Travel> travels) {
 		this.travels = travels;
 	}
 	
-	public List<Qualification> getQualifications() {
+	public Set<Qualification> getQualifications() {
 		return qualifications;
 	}
 
-	public void setQualifications(List<Qualification> qualifications) {
+	public void setQualifications(Set<Qualification> qualifications) {
 		this.qualifications = qualifications;
 	}
 	

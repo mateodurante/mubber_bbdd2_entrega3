@@ -4,13 +4,13 @@ import bd2.Muber.model.Driver;
 import bd2.Muber.model.Qualification;
 import bd2.Muber.model.Travel;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 public class DriverDTO extends UserDTO {
 	private Long idDriver;
 	private Date licenceExpiration;
-	private List<Travel> travels;
-	private List<Qualification> qualifications;
+	private Set<Travel> travels;
+	private Set<Qualification> qualifications;
 	
 	public DriverDTO(){
 	}
@@ -30,19 +30,19 @@ public class DriverDTO extends UserDTO {
 		this.idDriver = idDriver;
 	}
 
-	public List<Travel> getTravels() {
+	public Set<Travel> getTravels() {
 		return travels;
 	}
 
-	public void setTravels(List<Travel> travels) {
+	public void setTravels(Set<Travel> travels) {
 		this.travels = travels;
 	}
 	
-	public List<Qualification> getQualifications() {
+	public Set<Qualification> getQualifications() {
 		return qualifications;
 	}
 
-	public void setQualifications(List<Qualification> qualifications) {
+	public void setQualifications(Set<Qualification> qualifications) {
 		this.qualifications = qualifications;
 	}
 	

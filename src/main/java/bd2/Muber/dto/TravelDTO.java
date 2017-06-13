@@ -1,7 +1,7 @@
 package bd2.Muber.dto;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import bd2.Muber.model.Driver;
 import bd2.Muber.model.Passenger;
@@ -15,7 +15,7 @@ public class TravelDTO {
 	private Date date;
 	private int maxPassengers;
 	private boolean finalized;
-	private List<Passenger> passengers;
+	private Set<Passenger> passengers;
 	private DriverDTO driver;
 	
 	public TravelDTO(){
@@ -89,11 +89,11 @@ public class TravelDTO {
 		this.finalized = finalized;
 	}
 	
-	public List<Passenger> getPassengers() {
+	public Set<Passenger> getPassengers() {
 		return passengers;
 	}
 	
-	public void setPassengers(List<Passenger> passengers) {
+	public void setPassengers(Set<Passenger> passengers) {
 		this.passengers = passengers;
 	}
 	
