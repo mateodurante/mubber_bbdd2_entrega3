@@ -28,11 +28,11 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		Query query = session.createQuery(hql);
 		query.setParameter(0, driverId);
 		Driver result =(Driver) query.uniqueResult();
-		
-		DriverDTO driverDTO = new DriverDTO();
-		if (result != null){
-			driverDTO = new DriverDTO(result);
+				
+		if (result == null){
+			return null;
 		}
+		DriverDTO driverDTO = new DriverDTO(result);
 		// hay que hacer rollback si no hay modificacion? es recomendable?
 		tx.rollback();
 		session.disconnect();

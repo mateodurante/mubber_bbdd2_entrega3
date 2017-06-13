@@ -1,32 +1,24 @@
 package bd2.web;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Projections;
-import org.hibernate.service.ServiceRegistry;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.google.gson.Gson;
@@ -50,7 +42,7 @@ public class MuberRestController {
 		    .createCriteria(Muber.class)
 		    .setProjection(Projections.max("idMuber"));
 		long maxIdMuber = (long) criteria.uniqueResult();
-		Muber muber = (Muber) session.get(Muber.class, maxIdMuber);
+		Muber muber = session.get(Muber.class, maxIdMuber);
 		//session.close();
 		return muber;
 	}
@@ -82,19 +74,19 @@ public class MuberRestController {
 		return new Gson().toJson(aMap);
 	}
 	
-	protected Map<String, Object> getDriverToMap(Driver driver){
+	protected Map<String, Object> getDriverToMap(DriverDTO driverDTO){
 		Map<String, Object> driverMap = new HashMap<String, Object>();
 		Map<Long, Object> travelsMap = new HashMap<Long, Object>();
-		driverMap.put("userId", driver.getIdUser());
-		driverMap.put("username", driver.getUsername());
-		driverMap.put("addmissionDate", driver.getAdmissionDate());
-		driverMap.put("averageScore", driver.getQualificationAverange());
-		driverMap.put("licenceExpiration", driver.getLicenceExpiration());
-		//List<TravelDTO> travels = driver.getTravels();
-		//for (TravelDTO currentTravel: travels){
-		//	travelsMap.put(currentTravel.getIdTravel(), this.travelToMap(currentTravel));
-		//}
-		//driverMap.put("travels", travelsMap);
+		driverMap.put("userId", driverDTO.getIdUser());
+		driverMap.put("username", driverDTO.getUsername());
+		driverMap.put("addmissionDate", driverDTO.getAdmissionDate());
+		driverMap.put("averageScore", driverDTO.getQualificationAverage());
+		driverMap.put("licenceExpiration", driverDTO.getLicenceExpiration());
+		Set<TravelDTO> travelsDTO = driverDTO.getTravelsDTO();
+		for (TravelDTO currentTravel: travelsDTO){
+			travelsMap.put(currentTravel.getIdTravel(), this.travelToMap(currentTravel));
+		}
+		driverMap.put("travels", travelsMap);
 		return driverMap;
 	}
 	
@@ -152,8 +144,12 @@ public class MuberRestController {
 		Map<Long, Object> aMap = new HashMap<Long, Object>();		
 		DriverService service = ServiceLocator.getDriverService();
 		List<DriverDTO> driversList = service.findAllDrivers();
-		for (DriverDTO d : driversList){ 
-			aMap.put(d.getIdUser(), d.getUsername());
+		for (DriverDTO d : driversList){
+			Map<String, Object> driverMap = new HashMap<String, Object>();
+			driverMap.put("username", d.getUsername());
+			driverMap.put("averageScore", d.getQualificationAverage());
+			driverMap.put("licenceExpiration", d.getLicenceExpiration());
+			aMap.put(d.getIdUser(), driverMap);
 		}
 		return this.response(HttpStatus.OK, aMap);
 	}
@@ -198,13 +194,13 @@ public class MuberRestController {
 	
 	@RequestMapping(value = "/conductores/detalle/{conductorId}", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public ResponseEntity<?> infoConductor(@PathVariable("conductorId") long conductorId){
-		Session session = this.getSession();
-		Driver driver = (Driver) session.get(Driver.class, conductorId);
-		if (driver != null){
-			return this.response(HttpStatus.OK, this.getDriverToMap(driver));
+		DriverService service = ServiceLocator.getDriverService();
+		DriverDTO driverDTO = service.findById(conductorId);
+		if (driverDTO == null){
+			return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
 		}
 		// Ver cómo solucionar el problema de las relaciones circulares para no usar estas funciones creadas a mano.
-		return this.response(HttpStatus.NOT_FOUND, "No existe el conductor");
+		return this.response(HttpStatus.OK, this.getDriverToMap(driverDTO));
 	}
 
 	/*
@@ -264,6 +260,7 @@ public class MuberRestController {
 
 	@RequestMapping(value = "/conductores/top10", method = RequestMethod.GET, produces = "application/json" )
 	public ResponseEntity<?> conductoresTop10(){
+		/*
 		Session session = this.getSession();
 		List<Driver> top10 = this.getMuber(session).getTop10DriversWithoutOpenTravels();
 		Map<Long, Object> aMap = new HashMap<Long, Object>();
@@ -272,6 +269,8 @@ public class MuberRestController {
 		}
 		session.close();
 		return this.response(HttpStatus.OK, aMap);
+		*/
+		return null;
 	}
 
 	@RequestMapping(value = "/cargarDatos", method = RequestMethod.GET, produces = "application/json" )

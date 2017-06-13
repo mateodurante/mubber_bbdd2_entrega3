@@ -30,9 +30,26 @@ public class TravelDTO {
 		this.setMaxPassengers(aTravel.getMaxPassengers());
 		this.setFinalized(aTravel.isFinalized());
 		this.setPassengers(aTravel.getPassengers());
-		this.setDriver(aTravel.getDriver());
+		this.setDriver(new DriverDTO(aTravel.getDriver(), this));
 	}
 	
+	public TravelDTO(Travel aTravel, DriverDTO driverDTO) {
+		this.setIdTravel(aTravel.getIdTravel());
+		this.setDestiny(aTravel.getDestiny());
+		this.setOrigin(aTravel.getOrigin());
+		this.setTotalCost(aTravel.getTotalCost());
+		this.setDate(aTravel.getDate());
+		this.setMaxPassengers(aTravel.getMaxPassengers());
+		this.setFinalized(aTravel.isFinalized());
+		this.setPassengers(aTravel.getPassengers());
+		this.setDriver(driverDTO);
+	}
+
+	private void setDriver(DriverDTO driverDTO) {
+		this.driver = driverDTO;
+		
+	}
+
 	public Long getIdTravel() {
 		return idTravel;
 	}
