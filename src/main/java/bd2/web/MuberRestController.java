@@ -248,9 +248,8 @@ public class MuberRestController {
 	List<DriverDTO> driversDTO = service.getTop10DriversWithoutOpenTravels();
 	
 	Map<Long, Object> aMap = new HashMap<Long, Object>();
-	for(DriverDTO d: driversDTO){
-	    System.out.println(d.getIdUser());
-	    aMap.put((long) d.getIdUser(), this.getDriverToMap(d));
+	for(int i = 1; i<=driversDTO.size(); i++){
+	    aMap.put((long) i, this.getDriverToMap(driversDTO.get(i-1)));
 	}
 	/*
 	 * Session session = this.getSession(); List<Driver> top10 =

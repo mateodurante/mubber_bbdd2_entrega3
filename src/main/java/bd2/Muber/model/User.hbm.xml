@@ -24,7 +24,7 @@
         	    <key column="IDDRIVER" not-null="true"/>
         	    <one-to-many class="bd2.Muber.model.Travel" />
         	</set>
-        	<set name="qualifications" inverse="false" table="QUALIFICATION" lazy="true" cascade="all">
+        	<set name="qualifications" inverse="true" table="QUALIFICATION" lazy="true" cascade="all">
         	    <key column="IDDRIVER" not-null="true"/>
         	    <one-to-many class="bd2.Muber.model.Qualification" />
         	</set>

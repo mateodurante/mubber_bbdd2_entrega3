@@ -6,7 +6,16 @@ public class Qualification {
 	private String comment;
 	private Passenger passenger;
 	private Travel travel;
+	private Driver driver;
 	
+	public Driver getDriver() {
+	    return driver;
+	}
+
+	public void setDriver(Driver driver) {
+	    this.driver = driver;
+	}
+
 	public Qualification(){
 	}
 	
@@ -17,6 +26,7 @@ public class Qualification {
 		this.passenger = passenger;
 		this.travel = travel;
 		this.travel.getDriver().addQualification(this);
+		this.setDriver(this.travel.getDriver());
 	}
 
 	public Long getIdQualification() {

@@ -71,10 +71,11 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 	public List<DriverDTO> getTop10DriversWithoutOpenTravels(){
 		Session session = this.getSession();
 		Transaction tx = null;
+		tx = session.beginTransaction();
 		
-		String hql = "SELECT D FROM bd2.Muber.model.Driver as D "
+		String hql = "SELECT DISTINCT D FROM bd2.Muber.model.Driver as D "
 			+ "INNER JOIN bd2.Muber.model.Qualification as Q "
-			+ "ON D.idUser = Q.travel.driver.idUser "
+			+ "ON D.idUser = Q.driver.idUser "
 			+ "WHERE D.idUser NOT IN ( "
 			+ "SELECT T.driver.idUser "
 			+ "FROM bd2.Muber.model.Travel as T "
@@ -82,7 +83,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 			+ "ORDER BY Q.points DESC ";
 	
 		Query query = session.createQuery(hql);
-		//query.setMaxResults(10);
+		query.setMaxResults(10);
 		
 		List<Driver> result = query.list();
 		
