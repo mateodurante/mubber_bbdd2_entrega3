@@ -12,7 +12,6 @@ import org.hibernate.Transaction;
 
 import bd2.Muber.dto.DriverDTO;
 import bd2.Muber.model.Driver;
-import bd2.Muber.model.Muber;
 import bd2.Muber.model.Passenger;
 import bd2.Muber.model.Qualification;
 import bd2.Muber.model.Travel;
@@ -21,7 +20,7 @@ import bd2.Muber.repositories.DriverRepository;
 public class HibernateDriverRepository extends BaseHibernateRepository implements DriverRepository {
 
 	@Override
-	public DriverDTO getDriver(Long driverId) {
+	public DriverDTO getDriver(long driverId) {
 		Session session = this.getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
@@ -115,8 +114,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		tx = session.beginTransaction();
 		
 		System.out.println("Transacción creada.");
-		System.out.println("Creando y guardando Muber...");
-		Muber muber = new Muber();
+		System.out.println("Creando datos...");
 		
 		/**** Creando conductores ***/
 		System.out.println("Punto 4.A.");
@@ -153,6 +151,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		Passenger german = new Passenger("german", "ger", 20000);
 		Passenger alicia = new Passenger("alicia", "ali", 15000);
 		Passenger margarita = new Passenger("margarita", "mar", 15000);
+		Passenger hugo = new Passenger("hugo", "hug", 2300);
 		german.addTravel(viaje11);
 		alicia.addTravel(viaje11);
 		margarita.addTravel(viaje11);
@@ -188,36 +187,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		viaje8.finalize();
 		viaje9.finalize();
 		viaje10.finalize();
-		
-		/*** Hay que asociar todo a muber ***/
-		
-		muber.addDriver(roberto);
-		muber.addDriver(tito);
-		muber.addDriver(agueda);
-		muber.addDriver(lihuen);
-		muber.addDriver(daniel);
-		muber.addDriver(cristian);
-		muber.addDriver(barbaro);
-		muber.addDriver(jonsnow);
-		muber.addDriver(thor);
-		muber.addDriver(loki);
-		muber.addDriver(abierto);
-		
-		muber.addTravel(viaje1);
-		muber.addTravel(viaje2);
-		muber.addTravel(viaje3);
-		muber.addTravel(viaje4);
-		muber.addTravel(viaje5);
-		muber.addTravel(viaje6);
-		muber.addTravel(viaje7);
-		muber.addTravel(viaje8);
-		muber.addTravel(viaje9);
-		muber.addTravel(viaje10);
-		muber.addTravel(viaje11);
-
-		muber.addPassenger(german);
-		muber.addPassenger(alicia);
-		muber.addPassenger(margarita);
 
 		System.out.println("Guardando...");
 		session.saveOrUpdate(roberto);
@@ -231,6 +200,10 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		session.saveOrUpdate(thor);
 		session.saveOrUpdate(loki);
 		session.saveOrUpdate(abierto);
+		session.saveOrUpdate(german);
+		session.saveOrUpdate(alicia);
+		session.saveOrUpdate(margarita);
+		session.saveOrUpdate(hugo);
 
 		System.out.println("Cerrando transacción...");
 		tx.commit();

@@ -17,7 +17,7 @@ import bd2.Muber.repositories.PassengerRepository;
 public class HibernatePassengerRepository extends BaseHibernateRepository implements PassengerRepository {
 
 	@Override
-	public PassengerDTO getPassenger(Long passengerId) {
+	public PassengerDTO getPassenger(long passengerId) {
 		Session session = this.getSession();	
 		Transaction tx = session.beginTransaction();
 		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
@@ -53,7 +53,7 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 	}
 
 	@Override
-	public PassengerDTO updateTotalCredit(Long passengerId, float amount) {
+	public PassengerDTO updateTotalCredit(long passengerId, float amount) {
 		Session session = this.getSession();
 		Transaction tx = session.beginTransaction();
 		
@@ -74,27 +74,4 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		
 		return new PassengerDTO(aPassenger);
 	}
-/*
-	public void savePassenger(String username, String password, int totalCredit) {
-		Session session = this.getSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			
-			Passenger aPassenger = new Passenger(username, password, totalCredit);
-			session.save(aPassenger);
-			
-			tx.commit();
-			session.disconnect();
-			session.close();
-			return true;
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-				session.disconnect();
-				session.close();
-				return false;
-		}
-	}
-*/
 }

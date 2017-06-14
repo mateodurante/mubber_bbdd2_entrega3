@@ -18,17 +18,17 @@ public class TravelServiceImpl extends BaseServiceImpl implements TravelService 
 	}
 
 	@Override
-	public boolean addPassengerToTravel(Long travelId, Long passengerId) {
+	public boolean addPassengerToTravel(long travelId, long passengerId) {
 		return travelRepository.addPassengerToTravel(travelId, passengerId);
 	}
 
 	@Override
-	public boolean finalizeTravel(Long travelId) {
+	public boolean finalizeTravel(long travelId) {
 		return travelRepository.finalizeTravel(travelId);
 	}
 
 	@Override
-	public boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
+	public TravelDTO saveTravel(long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
 		return travelRepository.saveTravel(idDriver, origin, destiny, maxPassengers, totalCost);
 	}
 

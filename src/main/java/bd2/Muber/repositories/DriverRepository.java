@@ -6,7 +6,7 @@ import bd2.Muber.dto.DriverDTO;
 
 public interface DriverRepository extends BaseRepository {
 
-	DriverDTO getDriver(Long driverId);
+	DriverDTO getDriver(long driverId);
 	List<DriverDTO> getDrivers();
 	List<DriverDTO> getDriversTop10();
 	public void cargarDatos();

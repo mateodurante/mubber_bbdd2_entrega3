@@ -6,8 +6,8 @@ import bd2.Muber.dto.PassengerDTO;
 
 public interface PassengerRepository extends BaseRepository {
 	
-	PassengerDTO getPassenger(Long passengerId);
+	PassengerDTO getPassenger(long passengerId);
 	List<PassengerDTO> getPassengers();
-	PassengerDTO updateTotalCredit(Long passengerId, float amount);
+	PassengerDTO updateTotalCredit(long passengerId, float amount);
 	
 }

@@ -9,8 +9,8 @@ public interface TravelService {
 	TravelDTO findById(Long id);
 	List<TravelDTO> findFinalizedTravels();
 	List<TravelDTO> findOpenedTravels();
-	boolean addPassengerToTravel(Long travelId, Long passengerId);
-	boolean finalizeTravel (Long travelId);
-	boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost);
+	boolean addPassengerToTravel(long travelId, long passengerId);
+	boolean finalizeTravel (long travelId);
+	TravelDTO saveTravel(long idDriver, String origin, String destiny, int maxPassengers, float totalCost);
 
 }

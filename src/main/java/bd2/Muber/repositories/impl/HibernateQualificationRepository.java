@@ -15,7 +15,7 @@ import bd2.Muber.repositories.QualificationRepository;
 public class HibernateQualificationRepository extends BaseHibernateRepository implements QualificationRepository {
 
 	@Override
-	public Boolean saveQualification(Long idTravel, Long idPassenger, int points, String comment) {
+	public Boolean saveQualification(long idTravel, long idPassenger, int points, String comment) {
 		Session session = this.getSession();
 		
 		Transaction tx = null;
@@ -51,7 +51,7 @@ public class HibernateQualificationRepository extends BaseHibernateRepository im
 	}
 
 	@Override
-	public QualificationDTO getQualification(Long QualificationId) {
+	public QualificationDTO getQualification(long QualificationId) {
 		Session session = this.getSession();	
 		Transaction tx = session.beginTransaction();
 		String hql = "FROM bd2.Muber.model.Qualification P WHERE P.idQualification = ?";

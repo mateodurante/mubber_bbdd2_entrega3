@@ -43,7 +43,7 @@ public class MuberRestController {
 	Map<Long, Object> travelsMap = new HashMap<Long, Object>();
 	driverMap.put("userId", driverDTO.getIdUser());
 	driverMap.put("username", driverDTO.getUsername());
-	driverMap.put("addmissionDate", driverDTO.getAdmissionDate());
+	driverMap.put("admissionDate", driverDTO.getAdmissionDate());
 	driverMap.put("averageScore", driverDTO.getQualificationAverage());
 	driverMap.put("licenceExpiration", driverDTO.getLicenceExpiration());
 	Set<TravelDTO> travelsDTO = driverDTO.getTravelsDTO();
@@ -113,11 +113,7 @@ public class MuberRestController {
 	DriverService service = ServiceLocator.getDriverService();
 	List<DriverDTO> driversList = service.findAllDrivers();
 	for (DriverDTO d : driversList) {
-	    Map<String, Object> driverMap = new HashMap<String, Object>();
-	    driverMap.put("username", d.getUsername());
-	    driverMap.put("averageScore", d.getQualificationAverage());
-	    driverMap.put("licenceExpiration", d.getLicenceExpiration());
-	    aMap.put(d.getIdUser(), driverMap);
+	    aMap.put(d.getIdUser(), this.getDriverToMap(d));
 	}
 	return this.response(HttpStatus.OK, aMap);
     }
@@ -149,7 +145,8 @@ public class MuberRestController {
 	    value = "/viajes/calificar",
 	    method = RequestMethod.POST,
 	    produces = "application/json")
-    public ResponseEntity<?> calificarViaje(@RequestParam("viajeId") long viajeId,
+    public ResponseEntity<?> calificarViaje(
+	    @RequestParam("viajeId") long viajeId,
 	    @RequestParam("pasajeroId") long pasajeroId,
 	    @RequestParam("puntaje") int puntaje,
 	    @RequestParam("comentario") String comentario) {
@@ -186,15 +183,17 @@ public class MuberRestController {
 	    value = "/viajes/nuevo",
 	    method = RequestMethod.POST,
 	    produces = "application/json")
-    public ResponseEntity<?> crearViaje(@RequestParam("origen") String origin,
+    public ResponseEntity<?> crearViaje(
+	    @RequestParam("origen") String origin,
 	    @RequestParam("destino") String destiny,
 	    @RequestParam("conductorId") long idDriver,
 	    @RequestParam("costoTotal") float totalCost,
 	    @RequestParam("cantidadPasajeros") int maxPassengers) {
 	TravelService service = ServiceLocator.getTravelService();
 
-	if (service.saveTravel(idDriver, origin, destiny, maxPassengers, totalCost)) {
-	    return this.response();
+	TravelDTO t = service.saveTravel(idDriver, origin, destiny, maxPassengers, totalCost);
+	if (t != null) {
+	    return this.response(HttpStatus.CREATED, this.travelToMap(t));
 	}
 	return this.response(HttpStatus.NOT_FOUND, "No se pudo agregar el viaje, tal vez no existe el conductor");
     }
@@ -203,11 +202,13 @@ public class MuberRestController {
 	    value = "/viajes/agregarPasajero",
 	    method = RequestMethod.PUT,
 	    produces = "application/json")
-    public ResponseEntity<?> agregarPasajero(@RequestParam long viajeId, @RequestParam long pasajeroId) {
+    public ResponseEntity<?> agregarPasajero(
+	    @RequestParam("viajeId") long viajeId,
+	    @RequestParam("pasajeroId") long pasajeroId) {
 	TravelService service = ServiceLocator.getTravelService();
 
 	if (service.addPassengerToTravel(viajeId, pasajeroId)) {
-	    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+	    return this.response();
 	}
 	return this.response(HttpStatus.BAD_REQUEST, "No se puede agregar el pasajero al viaje indicado.");
     }
@@ -216,7 +217,8 @@ public class MuberRestController {
 	    value = "/pasajeros/cargarCredito",
 	    method = RequestMethod.PUT,
 	    produces = "application/json")
-    public ResponseEntity<?> cargarCredito(@RequestParam("pasajeroId") long passengerId,
+    public ResponseEntity<?> cargarCredito(
+	    @RequestParam("pasajeroId") long passengerId,
 	    @RequestParam("monto") long amount) {
 	PassengerService service = ServiceLocator.getPassengerService();
 	PassengerDTO passengerDTO = service.updateTotalCredit(passengerId, amount);
@@ -246,20 +248,12 @@ public class MuberRestController {
     public ResponseEntity<?> conductoresTop10() {
 	DriverService service = ServiceLocator.getDriverService();
 	List<DriverDTO> driversDTO = service.getTop10DriversWithoutOpenTravels();
-	
+
 	Map<Long, Object> aMap = new HashMap<Long, Object>();
-	for(int i = 1; i<=driversDTO.size(); i++){
-	    aMap.put((long) i, this.getDriverToMap(driversDTO.get(i-1)));
+	for (int i = 1; i <= driversDTO.size(); i++) {
+	    aMap.put((long) i, this.getDriverToMap(driversDTO.get(i - 1)));
 	}
-	/*
-	 * Session session = this.getSession(); List<Driver> top10 =
-	 * this.getMuber(session).getTop10DriversWithoutOpenTravels(); Map<Long,
-	 * Object> aMap = new HashMap<Long, Object>(); for (int i = 0; i <
-	 * top10.size(); i++) { aMap.put((long) i,
-	 * this.getDriverToMap(top10.get(i))); } session.close(); return
-	 * this.response(HttpStatus.OK, aMap);
-	 */
-	 return this.response(HttpStatus.OK, aMap);
+	return this.response(HttpStatus.OK, aMap);
     }
 
     @RequestMapping(

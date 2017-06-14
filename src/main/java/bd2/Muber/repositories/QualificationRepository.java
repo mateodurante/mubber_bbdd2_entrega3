@@ -4,7 +4,7 @@ import bd2.Muber.dto.QualificationDTO;
 
 public interface QualificationRepository extends BaseRepository {
 
-	QualificationDTO getQualification(Long QualificationId);
-	Boolean saveQualification(Long idTravel, Long idPassenger, int points, String comment);
+	QualificationDTO getQualification(long QualificationId);
+	Boolean saveQualification(long idTravel, long idPassenger, int points, String comment);
 	
 }

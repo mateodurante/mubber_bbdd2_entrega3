@@ -4,7 +4,7 @@ import bd2.Muber.dto.QualificationDTO;
 
 public interface QualificationService {
 	
-	QualificationDTO findById(Long id);
-	boolean saveQualification(Long idTravel, Long idPassenger, int points, String comment);
+	QualificationDTO findById(long id);
+	boolean saveQualification(long idTravel, long idPassenger, int points, String comment);
 	
 }

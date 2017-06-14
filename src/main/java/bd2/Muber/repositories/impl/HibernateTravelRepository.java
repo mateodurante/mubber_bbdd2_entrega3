@@ -22,7 +22,7 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public TravelDTO getTravel(Long id){
+	public TravelDTO getTravel(long id){
 		Session session = this.getSession();	
 		Transaction tx = null;
 		tx = session.beginTransaction();
@@ -42,7 +42,7 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public boolean saveTravel(Long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
+	public TravelDTO saveTravel(long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
 		Session session = this.getSession();
 		Transaction tx = null;
 		try {
@@ -56,21 +56,23 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 			Travel aTravel = new Travel(aDriver, origin, destiny, maxPassengers, totalCost);
 			session.save(aTravel);
 			
+			TravelDTO aTravelDTO = new TravelDTO(aTravel);
+			
 			tx.commit();
 			session.disconnect();
 			session.close();
-			return true;
+			return aTravelDTO;
 		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
 				session.disconnect();
 				session.close();
-				return false;
+				return null;
 		}
 	}
 
 	@Override
-	public boolean addPassengerToTravel(Long travelId, Long passengerId) {
+	public boolean addPassengerToTravel(long travelId, long passengerId) {
 		Session session = this.getSession();
 		Transaction tx = null;
 		try {
@@ -105,7 +107,7 @@ public class HibernateTravelRepository extends BaseHibernateRepository implement
 	}
 
 	@Override
-	public boolean finalizeTravel(Long travelId) {
+	public boolean finalizeTravel(long travelId) {
 		Session session = this.getSession();
 		Transaction tx = null;
 		try {

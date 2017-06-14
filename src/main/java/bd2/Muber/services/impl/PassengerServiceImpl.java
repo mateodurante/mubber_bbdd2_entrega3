@@ -7,7 +7,7 @@ import bd2.Muber.dto.PassengerDTO;
 public class PassengerServiceImpl extends BaseServiceImpl implements bd2.Muber.services.PassengerService {
 
 	@Override
-	public PassengerDTO findById(Long id) {
+	public PassengerDTO findById(long id) {
 		return passengerRepository.getPassenger(id);
 	}
 
@@ -29,7 +29,7 @@ public class PassengerServiceImpl extends BaseServiceImpl implements bd2.Muber.s
 	}
 
 	@Override
-	public PassengerDTO updateTotalCredit(Long passengerId, float amount) {
+	public PassengerDTO updateTotalCredit(long passengerId, float amount) {
 		return passengerRepository.updateTotalCredit(passengerId, amount);
 	}
 

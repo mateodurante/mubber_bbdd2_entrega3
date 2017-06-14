@@ -8,7 +8,7 @@ import bd2.Muber.services.DriverService;
 public class DriverServiceImpl extends BaseServiceImpl implements DriverService {
 
 	@Override
-	public DriverDTO findById(Long id) {
+	public DriverDTO findById(long id) {
 		return driverRepository.getDriver(id);
 	}
 
