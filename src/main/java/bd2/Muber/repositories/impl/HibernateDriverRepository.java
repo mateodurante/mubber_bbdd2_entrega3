@@ -3,6 +3,7 @@ package bd2.Muber.repositories.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -73,7 +74,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		Transaction tx = null;
 		tx = session.beginTransaction();
 		
-		String hql = "SELECT DISTINCT D FROM bd2.Muber.model.Driver as D "
+		String hql = "SELECT D FROM bd2.Muber.model.Driver as D "
 			+ "INNER JOIN bd2.Muber.model.Qualification as Q "
 			+ "ON D.idUser = Q.driver.idUser "
 			+ "WHERE D.idUser NOT IN ( "
@@ -83,35 +84,29 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 			+ "ORDER BY Q.points DESC ";
 	
 		Query query = session.createQuery(hql);
-		query.setMaxResults(10);
+		//query.setMaxResults(10);
 		
 		List<Driver> result = query.list();
 		
+		List<Driver> drivers = new ArrayList<Driver>();
+		Iterator<Driver> resultIterator = result.iterator();
+		while (resultIterator.hasNext() && drivers.size()<10) {
+		    Driver d = resultIterator.next();
+		    if (!drivers.contains(d)){
+    		    	drivers.add(d);
+		    }
+		}
+
 		List<DriverDTO> driversDTO = new ArrayList<DriverDTO>();
-		for (Driver d : result) {
-			DriverDTO dri = new DriverDTO(d);
-			driversDTO.add(dri);
+		for(Driver d: drivers){
+		    driversDTO.add(new DriverDTO(d));
 		}
 		
 		tx.rollback();
 		session.disconnect();
 		session.close();
 		return driversDTO;
-		/*
-		List<Driver> top10 = new ArrayList<Driver>();
-		for (Driver currentDriver : this.drivers){
-			if (!currentDriver.hasOpenTravels()){
-				top10.add(currentDriver);
-			}
-		}
-		top10.sort(new Comparator<Driver>() {
-			public int compare(Driver d1, Driver d2){
-				return d2.getQualificationAverange().compareTo(d1.getQualificationAverange());
-			}
-		});
-		
-		return (List<Driver>) top10.subList(0, top10.size() > 10? 10 : top10.size() );
-		*/
+
 	}
 	
 	public void cargarDatos(){
