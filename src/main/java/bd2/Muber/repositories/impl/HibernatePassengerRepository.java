@@ -18,8 +18,7 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 
 	@Override
 	public PassengerDTO getPassenger(long passengerId) {
-		Session session = this.getSession();	
-		Transaction tx = session.beginTransaction();
+		Session session = this.getSession();
 		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, passengerId);
@@ -28,7 +27,6 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		if (result != null){
 			passengerDTO = new PassengerDTO(result);
 		}
-		tx.rollback();
 		session.disconnect();
 		session.close();
 		return passengerDTO;
@@ -36,8 +34,7 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 
 	@Override
 	public List<PassengerDTO> getPassengers() {
-		Session session = this.getSession();	
-		Transaction tx = session.beginTransaction();
+		Session session = this.getSession();
 		String hql = "FROM bd2.Muber.model.Passenger";
 		Query query = session.createQuery(hql);
 		List<Passenger> passengers = query.list();
@@ -46,7 +43,6 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 			PassengerDTO pas = new PassengerDTO(p);
 			passengerDTO.add(pas);
 		}
-		tx.rollback();
 		session.disconnect();
 		session.close();		
 		return passengerDTO;
@@ -55,7 +51,6 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 	@Override
 	public PassengerDTO updateTotalCredit(long passengerId, float amount) {
 		Session session = this.getSession();
-		Transaction tx = session.beginTransaction();
 		
 		String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
@@ -68,7 +63,6 @@ public class HibernatePassengerRepository extends BaseHibernateRepository implem
 		
 		session.saveOrUpdate(aPassenger);
 		aPassenger.addCredit(amount);
-		tx.commit();
 		session.disconnect();
 		session.close();
 		

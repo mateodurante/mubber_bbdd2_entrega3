@@ -15,160 +15,121 @@ import bd2.Muber.repositories.TravelRepository;
 
 public class HibernateTravelRepository extends BaseHibernateRepository implements TravelRepository {
 
-	@Override
-	public List<TravelDTO> getTravels() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<TravelDTO> getTravels() {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public TravelDTO getTravel(long id){
-		Session session = this.getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
-		Query query = session.createQuery(hql);
-		query.setParameter(0, id);
-		Travel result = (Travel) query.uniqueResult();
-		
-		TravelDTO travelDTO = new TravelDTO();
-		if (result != null){
-			travelDTO = new TravelDTO(result);
-		}
-		tx.rollback();
-		session.disconnect();
-		session.close();
-		return travelDTO;
-	}
+    @Override
+    public TravelDTO getTravel(long id){
+	Session session = this.getSession();
+	String hql = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
+	Query query = session.createQuery(hql);
+	query.setParameter(0, id);
+	Travel result = (Travel) query.uniqueResult();
 
-	@Override
-	public TravelDTO saveTravel(long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
-		Session session = this.getSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			
-			String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
-			Query query = session.createQuery(hql);
-			query.setParameter(0, idDriver);
-			Driver aDriver = (Driver) query.uniqueResult();
-			
-			Travel aTravel = new Travel(aDriver, origin, destiny, maxPassengers, totalCost);
-			session.save(aTravel);
-			
-			TravelDTO aTravelDTO = new TravelDTO(aTravel);
-			
-			tx.commit();
-			session.disconnect();
-			session.close();
-			return aTravelDTO;
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-				session.disconnect();
-				session.close();
-				return null;
-		}
+	TravelDTO travelDTO = new TravelDTO();
+	if (result != null){
+	    travelDTO = new TravelDTO(result);
 	}
+	session.disconnect();
+	session.close();
+	return travelDTO;
+    }
 
-	@Override
-	public boolean addPassengerToTravel(long travelId, long passengerId) {
-		Session session = this.getSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			
-			String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
-			Query query = session.createQuery(hql);
-			query.setParameter(0, passengerId);
-			Passenger aPassenger = (Passenger) query.uniqueResult();
-			 
-			String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
-			Query query1 = session.createQuery(hql1);
-			query1.setParameter(0, travelId);
-			Travel aTravel = (Travel) query1.uniqueResult();
-		
-			if (aTravel.addPassenger(aPassenger)){
-				session.saveOrUpdate(aTravel);
-				tx.commit();
-				session.disconnect();
-				session.close();
-				return true;
-			}else{
-				tx.rollback();
-				session.disconnect();
-				session.close();
-				return false;
-			}
-		}
-		catch(Exception e){			
-			return false;
-		}
-	}
+    @Override
+    public TravelDTO saveTravel(long idDriver, String origin, String destiny, int maxPassengers, float totalCost) {
+	Session session = this.getSession();
 
-	@Override
-	public boolean finalizeTravel(long travelId) {
-		Session session = this.getSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			
-			String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
-			Query query1 = session.createQuery(hql1);
-			query1.setParameter(0, travelId);
-			Travel aTravel = (Travel) query1.uniqueResult();
-		
-			aTravel.finalize();
-			session.saveOrUpdate(aTravel);
-			tx.commit();
-			session.close();
-			return true;
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-				session.disconnect();
-				session.close();
-				return false;
-		}
-	}
+	String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
+	Query query = session.createQuery(hql);
+	query.setParameter(0, idDriver);
+	Driver aDriver = (Driver) query.uniqueResult();
 
-	@Override
-	public List<TravelDTO> getFinalizedTravels() {
-		Session session = this.getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
-		
-		String hql = "FROM bd2.Muber.model.Travel p WHERE p.finalized=true ";
-		Query query = session.createQuery(hql);
-		List<Travel> result = query.list();
-		
-		List<TravelDTO> travelsDTO = new ArrayList<TravelDTO>();
-		for (Travel t : result) {
-			TravelDTO travel = new TravelDTO(t);
-			travelsDTO.add(travel);
-		}
-		tx.rollback();
-		session.disconnect();
-		session.close();
-		return travelsDTO;
-	}
+	Travel aTravel = new Travel(aDriver, origin, destiny, maxPassengers, totalCost);
+	session.save(aTravel);
 
-	@Override
-	public List<TravelDTO> getOpenedTravels() {
-		Session session = this.getSession();	
-		Transaction tx = session.beginTransaction();
-		String hql = "FROM bd2.Muber.model.Travel p WHERE p.finalized=false ";
-		Query query = session.createQuery(hql);
-		List<Travel> result = query.list();
-		
-		List<TravelDTO> travelsDTO = new ArrayList<TravelDTO>();
-		for (Travel t : result) {
-			TravelDTO travel = new TravelDTO(t);
-			travelsDTO.add(travel);
-		}
-		tx.rollback();
-		session.disconnect();
-		session.close();
-		return travelsDTO;
+	TravelDTO aTravelDTO = new TravelDTO(aTravel);
+	;
+	session.disconnect();
+	session.close();
+	return aTravelDTO;
+    }
+
+    @Override
+    public boolean addPassengerToTravel(long travelId, long passengerId) {
+	Session session = this.getSession();
+
+	String hql = "FROM bd2.Muber.model.Passenger P WHERE P.idUser = ?";
+	Query query = session.createQuery(hql);
+	query.setParameter(0, passengerId);
+	Passenger aPassenger = (Passenger) query.uniqueResult();
+
+	String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
+	Query query1 = session.createQuery(hql1);
+	query1.setParameter(0, travelId);
+	Travel aTravel = (Travel) query1.uniqueResult();
+
+	if (aTravel.addPassenger(aPassenger)){
+	    session.saveOrUpdate(aTravel);
+	    session.disconnect();
+	    session.close();
+	    return true;
+	}else{
+	    session.disconnect();
+	    session.close();
+	    return false;
 	}
+    }
+
+    @Override
+    public boolean finalizeTravel(long travelId) {
+	Session session = this.getSession();
+
+	String hql1 = "FROM bd2.Muber.model.Travel T WHERE T.idTravel = ?";
+	Query query1 = session.createQuery(hql1);
+	query1.setParameter(0, travelId);
+	Travel aTravel = (Travel) query1.uniqueResult();
+
+	aTravel.finalize();
+	session.saveOrUpdate(aTravel);
+	session.close();
+	return true;
+    }
+
+    @Override
+    public List<TravelDTO> getFinalizedTravels() {
+	Session session = this.getSession();
+
+	String hql = "FROM bd2.Muber.model.Travel p WHERE p.finalized=true ";
+	Query query = session.createQuery(hql);
+	List<Travel> result = query.list();
+
+	List<TravelDTO> travelsDTO = new ArrayList<TravelDTO>();
+	for (Travel t : result) {
+	    TravelDTO travel = new TravelDTO(t);
+	    travelsDTO.add(travel);
+	}
+	session.disconnect();
+	session.close();
+	return travelsDTO;
+    }
+
+    @Override
+    public List<TravelDTO> getOpenedTravels() {
+	Session session = this.getSession();	
+	String hql = "FROM bd2.Muber.model.Travel p WHERE p.finalized=false ";
+	Query query = session.createQuery(hql);
+	List<Travel> result = query.list();
+
+	List<TravelDTO> travelsDTO = new ArrayList<TravelDTO>();
+	for (Travel t : result) {
+	    TravelDTO travel = new TravelDTO(t);
+	    travelsDTO.add(travel);
+	}
+	session.disconnect();
+	session.close();
+	return travelsDTO;
+    }
 }

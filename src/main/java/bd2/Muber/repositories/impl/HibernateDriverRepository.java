@@ -21,9 +21,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 
 	@Override
 	public DriverDTO getDriver(long driverId) {
-		Session session = this.getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
+		Session session = this.getSession();
 		
 		String hql = "FROM bd2.Muber.model.Driver P WHERE P.idUser = ?";
 		Query query = session.createQuery(hql);
@@ -35,7 +33,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		}
 		DriverDTO driverDTO = new DriverDTO(result);
 		// hay que hacer rollback si no hay modificacion? es recomendable?
-		tx.rollback();
 		session.disconnect();
 		session.close();
 		return driverDTO;
@@ -43,9 +40,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 
 	@Override
 	public List<DriverDTO> getDrivers() {
-		Session session = this.getSession();	
-		Transaction tx = null;
-		tx = session.beginTransaction();
+		Session session = this.getSession();
 		
 		String hql = "FROM bd2.Muber.model.Driver";
 		Query query = session.createQuery(hql);
@@ -56,7 +51,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 			DriverDTO dri = new DriverDTO(d);
 			driversDTO.add(dri);
 		}
-		tx.rollback();
 		session.disconnect();
 		session.close();		
 		return driversDTO;
@@ -70,8 +64,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 	
 	public List<DriverDTO> getTop10DriversWithoutOpenTravels(){
 		Session session = this.getSession();
-		Transaction tx = null;
-		tx = session.beginTransaction();
 		
 		String hql = "SELECT D FROM bd2.Muber.model.Driver as D "
 			+ "INNER JOIN bd2.Muber.model.Qualification as Q "
@@ -101,7 +93,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		    driversDTO.add(new DriverDTO(d));
 		}
 		
-		tx.rollback();
 		session.disconnect();
 		session.close();
 		return driversDTO;
@@ -110,8 +101,6 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 	
 	public void cargarDatos(){
 		Session session = this.getSession();
-		Transaction tx = null;
-		tx = session.beginTransaction();
 		
 		System.out.println("Transacción creada.");
 		System.out.println("Creando datos...");
@@ -189,6 +178,7 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		viaje10.finalize();
 
 		System.out.println("Guardando...");
+		session.saveOrUpdate(hugo);
 		session.saveOrUpdate(roberto);
 		session.saveOrUpdate(tito);
 		session.saveOrUpdate(agueda);
@@ -203,10 +193,8 @@ public class HibernateDriverRepository extends BaseHibernateRepository implement
 		session.saveOrUpdate(german);
 		session.saveOrUpdate(alicia);
 		session.saveOrUpdate(margarita);
-		session.saveOrUpdate(hugo);
 
 		System.out.println("Cerrando transacción...");
-		tx.commit();
 		session.disconnect();
 		session.close();
 		System.out.println("Terminado.");
