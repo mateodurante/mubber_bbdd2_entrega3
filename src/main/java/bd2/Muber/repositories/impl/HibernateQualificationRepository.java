@@ -40,7 +40,6 @@ public class HibernateQualificationRepository extends BaseHibernateRepository im
     @Override
     public QualificationDTO getQualification(long QualificationId) {
 	Session session = this.getSession();	
-	Transaction tx = session.beginTransaction();
 	String hql = "FROM bd2.Muber.model.Qualification P WHERE P.idQualification = ?";
 	Query query = session.createQuery(hql);
 	query.setParameter(0, QualificationId);
